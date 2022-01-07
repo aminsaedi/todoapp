@@ -34,6 +34,7 @@ const { reducer, actions } = createSlice({
         title: action.payload,
         status: "todo",
       });
+      localStorage.setItem("items", JSON.stringify(items.list));
     },
     itemStatusChanged: (
       items,
@@ -45,15 +46,27 @@ const { reducer, actions } = createSlice({
           return i;
         } else return i;
       });
+      localStorage.setItem("items", JSON.stringify(items.list));
     },
     itemRemoved: (items, action: PayloadAction<number>) => {
       items.list = items.list.filter((i) => i.id !== action.payload);
+      localStorage.setItem("items", JSON.stringify(items.list));
     },
     itemsCleared: (items, action: PayloadAction<undefined>) => {
       items.list = [];
+      localStorage.setItem("items", JSON.stringify(items.list));
     },
     selectedItemChanged: (items, action: PayloadAction<ItemType>) => {
       items.selectedItem = action.payload;
+    },
+    itemsLoaded: (items, action: PayloadAction<any>) => {
+      items.list = action.payload;
+    },
+    itemTitleChanged: (items, action) => {
+      const item = items.list.find((i) => i.id === action.payload.id);
+      if (!item) return;
+      item.title = action.payload.title;
+      items.selectedItem = item;
     },
   },
 });
@@ -65,6 +78,8 @@ const {
   itemStatusChanged,
   itemsCleared,
   selectedItemChanged,
+  itemsLoaded,
+  itemTitleChanged,
 } = actions;
 
 export const addItem =
@@ -100,4 +115,23 @@ export const changeSelectedItem =
     getState: any
   ) => {
     return dispatch(selectedItemChanged(item));
+  };
+
+export const loadItems =
+  (items: any) =>
+  (
+    dispatch: (arg0: { payload: ItemType; type: string }) => any,
+    getState: any
+  ) => {
+    dispatch(itemsLoaded(items));
+  };
+
+export const changeItemTitle =
+  (title: string, id: number) =>
+  async (
+    dispatch: (arg0: { payload: any; type: string }) => any,
+    getState: any
+  ) => {
+    await delay(2000);
+    return dispatch(itemTitleChanged({ title, id }));
   };

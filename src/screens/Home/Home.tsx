@@ -1,11 +1,11 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
 import Item from "../../components/Item/Item";
 import ModifyModal from "../../components/ModifyModal/ModifyModal";
 import NewItem from "../../components/NewItem/NewItem";
 import { RootState } from "../../store/store";
-import { clearItems } from "../../store/items";
+import { clearItems, loadItems } from "../../store/items";
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -18,6 +18,14 @@ const Home = () => {
   const finishedItems = useSelector(
     (state: RootState) => state.items.list
   ).filter((i) => i.status === "finished");
+
+  useEffect(() => {
+    let itemsFromLocalStorage = localStorage.getItem("items");
+    if (!itemsFromLocalStorage) return;
+    itemsFromLocalStorage = JSON.parse(itemsFromLocalStorage);
+    dispatch(loadItems(itemsFromLocalStorage));
+  }, [dispatch]);
+
   return (
     <React.Fragment>
       <ModifyModal />
