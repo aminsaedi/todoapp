@@ -45,7 +45,7 @@ const ModifyModal = () => {
             onClick={() => handleChangeStatus("todo")}
             type="button"
             className="btn btn-info"
-            disabled={selectedItem.status === "todo"}
+            disabled={selectedItem && selectedItem.status === "todo"}
           >
             To Do
           </button>
@@ -53,7 +53,7 @@ const ModifyModal = () => {
             onClick={() => handleChangeStatus("inProgress")}
             type="button"
             className="btn btn-warning"
-            disabled={selectedItem.status === "inProgress"}
+            disabled={selectedItem && selectedItem.status === "inProgress"}
           >
             In Progress
           </button>
@@ -61,7 +61,7 @@ const ModifyModal = () => {
             onClick={() => handleChangeStatus("finished")}
             type="button"
             className="btn btn-success"
-            disabled={selectedItem.status === "finished"}
+            disabled={selectedItem && selectedItem.status === "finished"}
           >
             Finished
           </button>

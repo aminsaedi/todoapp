@@ -1,13 +1,14 @@
 import React from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 
 import Item from "../../components/Item/Item";
 import ModifyModal from "../../components/ModifyModal/ModifyModal";
 import NewItem from "../../components/NewItem/NewItem";
 import { RootState } from "../../store/store";
+import { clearItems } from "../../store/items";
 
 const Home = () => {
-  document.title = "Todo App";
+  const dispatch = useDispatch();
   const todoItems = useSelector((state: RootState) => state.items.list).filter(
     (i) => i.status === "todo"
   );
@@ -67,7 +68,12 @@ const Home = () => {
             <NewItem />
           </div>
           <div className="col-lg-2 col-12 mt-2 mt-lg-0">
-            <button className="btn btn-danger w-100">Reset Items</button>
+            <button
+              onClick={() => dispatch(clearItems())}
+              className="btn btn-danger w-100"
+            >
+              Reset Items
+            </button>
           </div>
         </div>
       </main>
